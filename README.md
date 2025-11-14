@@ -46,16 +46,18 @@ A full-featured blogging application built with Node.js, Express, MongoDB, and E
 3. **Set up MongoDB**
    - Install MongoDB locally or use MongoDB Atlas
    - Create a database named `blog_app`
-   - Update the connection string in `app.js` if needed
+   - For local development, MongoDB will connect to `mongodb://localhost:27017/blog_app` by default
 
-4. **Environment Variables (Optional)**
-   Create a `.env` file in the root directory:
+4. **Environment Variables**
+   Create a `.env` file in the root directory (for local development):
    ```env
    PORT=3000
    MONGODB_URI=mongodb://localhost:27017/blog_app
    JWT_SECRET=your-secret-key-here
    NODE_ENV=development
    ```
+   
+   **Note**: The app now uses environment variables. If `MONGODB_URI` is not set, it defaults to local MongoDB.
 
 5. **Start the application**
    ```bash
@@ -172,6 +174,40 @@ blog-app/
 ## License
 
 This project is licensed under the ISC License.
+
+## Deployment to Vercel
+
+### Prerequisites
+1. A MongoDB Atlas account (free tier available)
+2. A Vercel account
+
+### Steps
+
+1. **Set up MongoDB Atlas**
+   - Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+   - Create a free cluster
+   - Create a database user (remember the username and password)
+   - Whitelist IP addresses: Click "Network Access" → "Add IP Address" → "Allow Access from Anywhere" (0.0.0.0/0) for Vercel
+   - Get your connection string: Click "Connect" → "Connect your application" → Copy the connection string
+   - Replace `<password>` with your database user password
+   - Replace `<dbname>` with `blog_app` (or your preferred database name)
+   - Example: `mongodb+srv://username:password@cluster.mongodb.net/blog_app?retryWrites=true&w=majority`
+
+2. **Deploy to Vercel**
+   - Push your code to GitHub
+   - Import your repository in Vercel
+   - Add Environment Variables in Vercel:
+     - Go to your project → Settings → Environment Variables
+     - Add the following:
+       - `MONGODB_URI`: Your MongoDB Atlas connection string
+       - `JWT_SECRET`: A secure random string (for production)
+       - `NODE_ENV`: `production`
+   - Deploy!
+
+3. **Important Notes**
+   - Make sure your MongoDB Atlas cluster allows connections from anywhere (0.0.0.0/0) or add Vercel's IP ranges
+   - Never commit your `.env` file to Git
+   - The `MONGODB_URI` environment variable is now required for production deployments
 
 ## Support
 
